@@ -3,7 +3,7 @@
   margin: 0;
 }
 
-h1 {
+.pageHeader h1 {
   margin: 0;
 }
 .pageHeader {
@@ -12,6 +12,9 @@ h1 {
   margin:  0;
 }
 
+.moviesCardsContainer {
+  margin-top: 50px;
+}
 
 .moviesList {
   padding-top: 10px;
