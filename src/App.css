@@ -1,38 +1,90 @@
 .App {
   text-align: center;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  margin: 0;
+}
+.pageHeader {
+  background-color: #61dafb;
+  padding: 0;
+  margin:  0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.moviesList {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.movieCard {
+  width: 230px;
+  display: inline-block;
+  margin: 1em;
+  /**
+  transition: all 0.8s ease;
+
+   */
+  /**
+  background-color: azure;
+  border-radius: 5px;
+  margin: 1em;
+  display: inline-block;
+  box-shadow: 3px 3px 6px 3px #888888;
+  transition: all 0.8s;
+  */
 }
 
-.App-link {
-  color: #61dafb;
+.movieCard:hover{
+  /**
+  transform: translate3D(0,-1px,0) scale(1.03);
+  transition: all 0.8s ease;
+  /**transform: scale(1.02);*/
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.imdbNote {
+  margin-top: 0.5em;
+  font-weight: 600;
+  font-family: 'Roboto Thin', sans-serif;
+  text-align: center;
+  color: deepskyblue;
+  font-size: 0.95em;
+}
+.movieCardCoverPicture {
+
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.cardMovieTitle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  line-height: 1.35;
+  margin-left: 0;
+  margin-right: 0;
+  width: 230px;
+  color: #1976d2;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.cardMovieTitle > h3 {
+  margin-top: 0.5em;
+  margin-bottom: 0.25em;
+}
+.cardNormalText {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2em;
+  font-weight: 300;
+  color: gray;
+  padding: 1px;
+  margin: 0;
+}
+.qualityChipsContainer {
+  padding: 0.25em;
+}
+.qualityChips {
+  margin: 0.25em;
+}
+#modalContainer {
+  text-align: center;
 }
