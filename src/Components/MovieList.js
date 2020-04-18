@@ -1,7 +1,7 @@
 import React from "react";
 import MovieCard from "./MovieCard";
 
-class MoviesList extends React.Component{
+class MoviesList extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -9,7 +9,9 @@ class MoviesList extends React.Component{
     render() {
         return (
             <div className='moviesList'>
-                {this.props.moviesList.map((movie, index) => <MovieCard movie={movie} key={index} handleClick={this.props.handleOnClick} index={index}/>)}
+                {this.props.moviesList.map((movie, index) => <MovieCard movie={movie} key={index}
+                                                                        handleClick={this.props.handleOnClick}
+                                                                        index={index}/>)}
             </div>
         );
     }

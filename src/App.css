@@ -25,25 +25,10 @@
   width: 230px;
   display: inline-block;
   margin: 1em;
-  /**
-  transition: all 0.8s ease;
-
-   */
-  /**
-  background-color: azure;
-  border-radius: 5px;
-  margin: 1em;
-  display: inline-block;
-  box-shadow: 3px 3px 6px 3px #888888;
-  transition: all 0.8s;
-  */
 }
 
 .movieCard:hover{
-  /**
-  transform: translate3D(0,-1px,0) scale(1.03);
-  transition: all 0.8s ease;
-  /**transform: scale(1.02);*/
+
 }
 
 .imdbNote {
@@ -54,11 +39,13 @@
   color: deepskyblue;
   font-size: 0.95em;
 }
+
 .movieCardCoverPicture {
 
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
+
 .cardMovieTitle {
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
@@ -70,6 +57,7 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
 .cardMovieTitle > h3 {
   margin-top: 0.5em;
   margin-bottom: 0.25em;
@@ -90,4 +78,19 @@
 }
 #modalContainer {
   text-align: center;
+}
+.modalContainer {
+  background-color: white;
+}
+.MovieModalTitleContainer{
+  display: inline-block;
+  margin-left: 1em;
+}
+.trailerContainer {
+  display: inline-block;
+  margin-right: 1em;
+}
+.youtubeTrailer{
+  width: 600px;
+  height: 300px;
 }

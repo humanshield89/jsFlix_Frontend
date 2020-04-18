@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,12 +38,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SearchAppBar() {
+export default function MyAppBar(props) {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <AppBar /**position="static"*/ color="primaryLight">
+            <AppBar /**position="static"*/ color="default">
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -64,6 +65,7 @@ export default function SearchAppBar() {
                         <AccountCircleIcon/>
                     </IconButton>
                 </Toolbar>
+                <LinearProgress hidden={!props.pendingTasks}/>
             </AppBar>
         </div>
     );

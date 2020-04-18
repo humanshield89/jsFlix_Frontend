@@ -1,22 +1,54 @@
 import React from 'react';
 import './App.css';
 import YifyContainer from "./Components/YifyContainer";
-import AppBar from "@material-ui/core/AppBar";
-import Typography from "@material-ui/core/Typography";
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import {makeStyles} from "@material-ui/core/styles";
-import {fade} from "@material-ui/core";
 import MyAppBar from "./Components/MyAppBar";
 
-function App() {
+class App extends React.Component {
 
-  return (
-    <div className="App">
-      <MyAppBar />
-      <YifyContainer />
-        </div>
-  );
+    export;
+    default;
+    App;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            pendingTasks: []
+        };
+        this.addPendingTask = this.addPendingTask.bind(this);
+        this.removePendingTask = this.removePendingTask.bind(this);
+    }
+
+    addPendingTask(task) {
+        console.log('adding pending task ');
+        console.log(this.state.pendingTasks);
+        let prevTasks = this.state.pendingTasks;
+        prevTasks.push(task);
+        this.setState({
+            pendingTasks: prevTasks
+        });
+    }
+
+    removePendingTask(task) {
+        console.log('removing pending  task ');
+        const newPendingTasksArray = this.state.pendingTasks.filter((value, index, array) => {
+            return value.id !== task.id
+        });
+
+        this.setState(
+            {
+                pendingTasks: newPendingTasksArray
+            }
+        );
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <MyAppBar pendingTasks={this.state.pendingTasks.length > 0}/>
+                <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask}/>
+            </div>
+        );
+    }
 }
 
 export default App;

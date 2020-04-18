@@ -8,10 +8,10 @@ import Modal from "react-modal";
 Modal.setAppElement('#root');
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <App/>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 

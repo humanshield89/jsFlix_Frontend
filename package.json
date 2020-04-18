@@ -12,7 +12,8 @@
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
     "react-scripts": "3.4.1",
-    "webtorrent": "^0.108.1"
+    "webtorrent": "^0.108.1",
+    "youtube-embed": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

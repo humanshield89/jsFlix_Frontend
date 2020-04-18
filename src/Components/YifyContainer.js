@@ -1,14 +1,14 @@
 import React from "react";
 import MoviesList from "./MovieList"
 import ReactModal from "react-modal";
-import Modal from "react-modal"
-import webTorrent from "webtorrent"
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import MovieDetailsModal from "./MovieDetailsModal";
 
 
 const WebTorrent = require('webtorrent');
 
 const backendURL = 'https://jsflixapi.humanshield85.tk';
+
 class YifyContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -20,7 +20,7 @@ class YifyContainer extends React.Component {
         this.getVideoPlayer = this.getVideoPlayer.bind(this);
         this.state = {
             filters: {
-                limit: 50,
+                limit: 14,
                 page: 1,
                 quality: '720p', // 720p, 1080p, 2160p, 3D
                 minimum_rating: 0, //0-9
@@ -32,24 +32,24 @@ class YifyContainer extends React.Component {
             moviesList: [],
             showModal: false,
             currentMovieModal: null,
-            videoPlaying : false,
-            videoSource : null
+            videoPlaying: false,
+            videoSource: null
 
-        }
+        };
         this.getMovieList();
     }
 
     handleOnMovieCardClick(index) {
         this.setState({
-            currentMovieModal : this.state.moviesList[index]
-        })
+            currentMovieModal: this.state.moviesList[index]
+        });
         this.handleOpenModal()
     }
 
-    handleDownload(){
+    handleDownload() {
         var torrentId = this.state.currentMovieModal.torrents[0].hash;
-        for(var i = 0 ; i < this.state.currentMovieModal.torrents.length ; i++){
-            if(this.state.currentMovieModal.torrents[i].quality === "720p"){
+        for (var i = 0; i < this.state.currentMovieModal.torrents.length; i++) {
+            if (this.state.currentMovieModal.torrents[i].quality === "720p") {
                 torrentId = this.state.currentMovieModal.torrents[i].hash
                 break;
             }
@@ -61,56 +61,62 @@ class YifyContainer extends React.Component {
             console.log(http.responseText)
             this.setState({
                 videoSource: backendURL + http.responseText,
-                videoPlaying : true
+                videoPlaying: true
             })
         })
-        const url = backendURL+'/?hash='+torrentId;
+        const url = backendURL + '/?hash=' + torrentId;
         console.log(url)
         http.open("GET", url);
         http.send();
 
     }
 
-    getVideoPlayer(){
-        if(this.state.videoPlaying)
-        return (
+    getVideoPlayer() {
+        if (this.state.videoPlaying)
+            return (
 
-         <video
-            controls
-            preload="metadata"//"auto"
-            width="1280"
-            height="540"
-            poster={this.state.currentMovieModal.background_image_original}
-            >
-            <source src={this.state.videoSource} type="video/mp4"/>
-        </video>);
+                <video
+                    controls
+                    preload="metadata"//"auto"
+                    width="1280"
+                    height="540"
+                    poster={this.state.currentMovieModal.background_image_original}
+                >
+                    <source src={this.state.videoSource} type="video/mp4"/>
+                </video>);
     }
 
     getMovieList() {
         const http = new XMLHttpRequest();
+        const url = 'https://yts.mx/api/v2/list_movies.json?sort_by=' + this.state.filters.sort_by + '&limit=' + this.state.filters.limit;
+        const task = {
+            id: 1,
+            description: "Fetching movies list from " + url
+        };
+        this.props.addPendingTask(task);
         http.addEventListener('load', () => {
-            if(http.status === 200){
+            if (http.status === 200) {
                 const response = JSON.parse(http.responseText);
                 this.setState({
                     moviesList: response.data.movies
-                })
+                });
             }
+            this.props.removePendingTask(task);
         });
 
-        const url = 'https://yts.mx/api/v2/list_movies.json?sort_by='+this.state.filters.sort_by+'&limit='+this.state.filters.limit;
-        console.log("fetching movies list from"+url);
+        console.log("fetching movies list from" + url);
         http.open("GET", url);
         http.send();
     }
 
 
-    handleOpenModal () {
-        this.setState({ showModal: true });
+    handleOpenModal() {
+        this.setState({showModal: true});
     }
 
 
-    handleCloseModal () {
-        this.setState({ showModal: false });
+    handleCloseModal() {
+        this.setState({showModal: false});
     }
 
 
@@ -128,12 +134,11 @@ class YifyContainer extends React.Component {
         }));
         return (
             <div className="moviesCardsContainer">
-                <MoviesList moviesList={this.state.moviesList} handleOnClick={this.handleOnMovieCardClick} class={classes.root}/>
-                <ReactModal id="modalContainer" isOpen={this.state.showModal} shouldCloseOnOverlayClick={true} contentLabel="Minimal Modal Example" onRequestClose={this.handleCloseModal}>
-                    <h1>{this.state.currentMovieModal && this.state.currentMovieModal.title}</h1>
-                    {!this.state.videoPlaying && <button onClick={this.handleDownload}>Download</button>}
-                    {this.getVideoPlayer()}
-                </ReactModal>
+                <MoviesList moviesList={this.state.moviesList} handleOnClick={this.handleOnMovieCardClick}
+                            class={classes.root}/>
+                {this.state.showModal && <MovieDetailsModal movie={this.state.currentMovieModal} showModal={this.state.showModal} handleClose={this.handleCloseModal}/>}
+
+
             </div>
         );
     }
