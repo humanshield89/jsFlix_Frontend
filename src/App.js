@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import YifyContainer from "./Components/YifyContainer";
 import MyAppBar from "./Components/MyAppBar";
+import PagePlayer from "./Components/MoviePlayerPage";
 
 class App extends React.Component {
 
@@ -9,13 +10,28 @@ class App extends React.Component {
     default;
     App;
 
+
     constructor(props) {
         super(props);
         this.state = {
-            pendingTasks: []
+            pendingTasks: [],
+            onPlayerPage: false,
+            moviePlaying: null,
+            movieSourceUrl: null
         };
         this.addPendingTask = this.addPendingTask.bind(this);
         this.removePendingTask = this.removePendingTask.bind(this);
+        this.handleGoToPlayer = this.handleGoToPlayer.bind(this);
+    }
+
+    handleGoToPlayer (movie , sourceLink){
+        this.setState(
+            {
+                onPlayerPage: true,
+                moviePlaying : movie,
+                movieSourceUrl: sourceLink
+            }
+        )
     }
 
     addPendingTask(task) {
@@ -44,8 +60,10 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <MyAppBar pendingTasks={this.state.pendingTasks.length > 0}/>
-                <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask}/>
+                {!this.state.onPlayerPage ? <div style={{backgroundColor:'transparent'}}>
+                    <MyAppBar pendingTasks={this.state.pendingTasks.length > 0}/>
+                    <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask} goToplayer={this.handleGoToPlayer}/>
+                </div> : <PagePlayer movie={this.state.moviePlaying} sourceUrl={this.state.movieSourceUrl}/>}
             </div>
         );
     }

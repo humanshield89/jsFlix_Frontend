@@ -3,12 +3,12 @@ import MoviesList from "./MovieList"
 import ReactModal from "react-modal";
 import {makeStyles} from '@material-ui/core/styles';
 import MovieDetailsModal from "./MovieDetailsModal";
+import WebSocketManager from "../connections/websocket";
 
 
 const WebTorrent = require('webtorrent');
 
 const backendURL = 'https://jsflixapi.humanshield85.tk';
-
 class YifyContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -20,13 +20,13 @@ class YifyContainer extends React.Component {
         this.getVideoPlayer = this.getVideoPlayer.bind(this);
         this.state = {
             filters: {
-                limit: 14,
+                limit: 30,
                 page: 1,
                 quality: '720p', // 720p, 1080p, 2160p, 3D
                 minimum_rating: 0, //0-9
                 query_term: "",
                 genre: "",
-                sort_by: 'download_count', // String (title, year, rating, peers, seeds, download_count, like_count, date_added, featured)
+                sort_by: 'date_added', // String (title, year, rating, peers, seeds, download_count, like_count, date_added, featured)
                 order_by: 'desc',//String (desc, asc)
             },
             moviesList: [],
@@ -136,7 +136,7 @@ class YifyContainer extends React.Component {
             <div className="moviesCardsContainer">
                 <MoviesList moviesList={this.state.moviesList} handleOnClick={this.handleOnMovieCardClick}
                             class={classes.root}/>
-                {this.state.showModal && <MovieDetailsModal movie={this.state.currentMovieModal} showModal={this.state.showModal} handleClose={this.handleCloseModal}/>}
+                {this.state.showModal && <MovieDetailsModal movie={this.state.currentMovieModal} showModal={this.state.showModal} handleClose={this.handleCloseModal} handleGoToPlayer={this.props.goToplayer}/>}
 
 
             </div>
