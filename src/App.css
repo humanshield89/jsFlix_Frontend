@@ -27,10 +27,6 @@
   margin: 1em;
 }
 
-.movieCard:hover{
-
-}
-
 .imdbNote {
   margin-top: 0.5em;
   font-weight: 600;
@@ -41,7 +37,6 @@
 }
 
 .movieCardCoverPicture {
-
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -93,4 +88,43 @@
 .youtubeTrailer{
   width: 600px;
   height: 300px;
+}
+
+@media screen and (max-width: 800px) {
+  .movieCard {
+    width: 154px;
+    display: inline-block;
+    margin: 1em;
+  }
+  .cardMovieTitle {
+    width: 154px;
+    color: #1976d2;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 0.9em;
+  }
+
+  .movieCardCoverPicture {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 154px;
+    height: 230px;
+  }
+
+  .qualityChipsContainer {
+    padding: 0.25em;
+    display: none;
+  }
+  .cardMovieTitle > h3 {
+    margin-top: 0.25em;
+    margin-bottom: 0.12em;
+  }
+  .cardNormalText {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.0em;
+    font-weight: 300;
+    color: gray;
+    padding: 1px;
+    margin: 0;
+  }
 }
