@@ -68,7 +68,6 @@ class MovieCard extends React.Component {
                             <h3>
                                 {this.props.movie.title}
                             </h3>
-
                         </div>
                         <Divider variant="middle"/>
                         <div className="imdbNote">

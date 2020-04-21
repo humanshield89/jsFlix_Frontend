@@ -5,16 +5,15 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Paper from "@material-ui/core/Paper";
 import Zoom from "@material-ui/core/Zoom";
 import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import * as PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import CloseIcon from '@material-ui/icons/Close';
 import WebSocketManager from "../connections/websocket";
+import CardQualityStream from "./CardQualityStream";
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme) => ({
     tabsContainer: {
@@ -43,29 +42,6 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0),
     },
 }));
-
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box p={3}>{children}</Box>}
-        </Typography>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
 
 function a11yProps(index) {
     return {
@@ -109,40 +85,14 @@ export default function MovieDetailsModal(props) {
     const youtubeEmbed = require('youtube-embed');
 
     const [value, setValue] = React.useState(0);
-    const [preparing, setPreparing] = React.useState(false);
-    const [prepareProgress, setPrepareProgress] = React.useState(0.0);
     const [tabValue, setTabValue] = React.useState(0);
 
     const handleTopBarChange = (event, newValue) => {
         setTabValue(newValue);
     };
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-
-    const handlePrepareClick = (event) => {
-        event.preventDefault();
-        let hash = event.target.getAttribute("hash");
-        hash = hash ? hash : event.target.parentElement.getAttribute("hash");
-        console.log(event.target);
-        console.log(hash);
-        webSocket.onMessageReceived = (msg) => {
-            console.log(msg.value);
-            setPrepareProgress(msg.value);
-        };
-        webSocket.socketSendMessage(hash);
-        setPreparing(true);
-    };
-
-    function handleWatchNowClick(event) {
-        let movie = props.movie;
-        let hash = event.target.getAttribute("hash");
-        hash = hash ? hash : event.target.parentElement.getAttribute("hash");
-        let sourceURL = 'https://jsflixapi.humanshield85.tk/movie?hash=' + hash;
-        props.handleGoToPlayer(movie, sourceURL);
-    }
 
     const makeTabs = (movie) => {
         if (!movie) return [];
@@ -156,7 +106,6 @@ export default function MovieDetailsModal(props) {
                 if (quality === '3D') i += 4;
                 if (type === 'bluray') i += 10;
                 if (type === 'web') i += 20;
-                //console.log('i for '+quality+' and '+type+ ' = '+i);
                 return i;
             }
 
@@ -170,39 +119,12 @@ export default function MovieDetailsModal(props) {
             return <Tab label={value1.quality + ' ' + value1.type} key={index} {...a11yProps(index)} />;
         }));
         const tabContainers = sortedTorrents.map(((value1, index) => {
-            return (
-                <TabPanel value={value} index={index} key={index} className={classes.tabsContainer}>
-                    <Paper className={classes.availableStreamsItem}>
-                        <Typography variant='h6' component='h6'>
-                            <p>{"File size: " + value1.size}</p>
-                            <p>{"Duration: " + movie.runtime + " minutes   "}</p>
-                            {!preparing &&
-                            <Button variant="contained" color="primary" component="span" hash={value1.hash}
-                                    onClick={handlePrepareClick}>
-                                Prepare A Stream!
-                            </Button>}
-                            {preparing &&
-                            <div>
-                                <p>Preparing video Stream : {prepareProgress + " %"}</p>
-                                {
-                                    (prepareProgress > 5) &&
-                                    <Button onClick={handleWatchNowClick} variant="contained" color="primary"
-                                            component="span" hash={value1.hash}>
-                                        Watch Now
-                                    </Button>
-                                }
-                            </div>
-
-                            }
-                        </Typography>
-                    </Paper>
-                </TabPanel>
+            return (<CardQualityStream value={value} torrent={value1} movie={movie} index={index} classes={classes} webSocket={webSocket} key={index} handleGoToPlayer={props.handleGoToPlayer}/>
             );
         }));
         return [tabHeaders, tabContainers];
     };
     const tabsArray = makeTabs(props.movie);
-
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -218,14 +140,54 @@ export default function MovieDetailsModal(props) {
         >
             <Zoom in={props.showModal}>
                 <Paper className={classes.paper} style={{ maxHeight: '95%',height: '1080px', position: 'relative'}}>
-                    <AppBar position="static">
+                    <AppBar position="static" color={"default"}>
                             <Tabs value={tabValue} onChange={handleTopBarChange} aria-label="top tabs" centered>
-                                <Tab label="Details" {...a11yPropsTop(0)} />
-                                <Tab label="Available Streams" {...a11yPropsTop(1)} />
+                                <Tab label="Available streams" {...a11yPropsTop(0)} />
+                                <Tab label="Movie details" {...a11yPropsTop(1)} />
                             </Tabs>
                         </AppBar>
-                    <div style={{ maxHeight: '85%',height: '1080px', position: 'relative', overflow: 'auto' }}>
-                        <TopTabPanel value={tabValue} index={0}>
+                    <div style={{ maxHeight: '85%',height: '1080px', position: 'relative', overflow: 'auto' }} >
+                        <TopTabPanel value={tabValue} index={0} style={{margin:'0',padding:'0'}}>
+                            <Container maxWidth="sm" style={{margin:'0',padding:'0'}}>
+                                    <span style={{ textAlign: 'left' }}>
+                                        <p>
+                                            <Typography variant='h5' style={{textAlign: 'center'}}>
+                                                {props.movie.title+' ('+props.movie.year+') '}
+                                            </Typography>
+                                        </p>
+                                        <Divider variant="middle"/>
+                                        {
+                                        <p>
+                                            {<Typography variant='h6'>
+                                            How to watch :
+                                            </Typography>
+                                            }
+                                            <Typography variant='subtitle1'>
+                                                <p id="transition-modal-description">
+                                                    Choose your desired quality , we will prepare a stream for you ,Once the stream is prepared a watch now button will show click it to start watching your movie
+                                                </p>
+                                            </Typography>
+                                        </p>
+                                        }
+                                    </span>
+                                <Container  maxWidth="100%" style={{margin:0,padding:0,width:'100%'}}>
+                                    {/**<Typography variant='h5'>
+                                        <p style={{marginTop: '0.3em', marginBottom: '0.3em'}}>Available Streams</p>
+                                    </Typography>*/}
+                                    <AppBar position="static" color='default' >
+                                        <Tabs value={value} onChange={handleChange} aria-label="simple tabs"
+                                              indicatorColor="primary"
+                                              textColor="primary"
+                                              variant="scrollable"
+                                              scrollButtons="auto">
+                                            {tabsArray[0]}
+                                        </Tabs>
+                                    </AppBar>
+                                    {tabsArray[1]}
+                                </Container>
+                            </Container>
+                        </TopTabPanel>
+                        <TopTabPanel value={tabValue} index={1} style={{margin:0,padding:0}}>
                             <Container maxWidth="sm">
                                 <Typography id="transition-modal-title" variant='h2'>
                                     {props.movie && props.movie.title}
@@ -255,53 +217,6 @@ export default function MovieDetailsModal(props) {
                                             frameBorder="0" />
                                 </div>
                             </Container>
-                        </TopTabPanel>
-                        <TopTabPanel value={tabValue} index={1}>
-                            <Container maxWidth="sm" style={{margin:0,padding:0}}>
-                                    <span style={{ textAlign: 'left' }}>
-                                        <Typography variant='h6'>
-                                            Guide:
-                                        </Typography>
-                                        <Typography variant='subtitle1'>
-                                            <p id="transition-modal-description">
-                                                Choose your desired quality , we will prepare a stream for you ,Once the stream is prepared a watch now button will show click it to start watching your movie
-                                            </p>
-                                        </Typography>
-                                    </span>
-                                <Container  maxWidth="sm" style={{margin:0,padding:0}}>
-                                    <Typography variant='h5'>
-                                        <p style={{marginTop: '0.3em', marginBottom: '0.3em'}}>Available Streams</p>
-                                    </Typography>
-                                    <AppBar position="static" color='default'>
-                                        <Tabs value={value} onChange={handleChange} aria-label="simple tabs"
-                                              indicatorColor="primary"
-                                              textColor="primary"
-                                              variant="scrollable"
-                                              scrollButtons="auto">
-                                            {tabsArray[0]}
-                                        </Tabs>
-                                    </AppBar>
-                                    {tabsArray[1]}
-                                </Container>
-                            </Container>
-
-                            {/**
-                             <Container maxWidth='sm'>
-                             <Typography variant='h5'>
-                             <p style={{marginTop: '0.3em', marginBottom: '0.3em'}}>Available Streams</p>
-                             </Typography>
-                             <AppBar position="static" color='default'>
-                             <Tabs value={value} onChange={handleChange} aria-label="simple tabs"
-                             indicatorColor="primary"
-                             textColor="primary"
-                             variant="scrollable"
-                             scrollButtons="auto">
-                             {tabsArray[0]}
-                             </Tabs>
-                             </AppBar>
-                             {tabsArray[1]}
-                             </Container> ** /
-                             */}
                         </TopTabPanel>
                     </div>
                     <Button onClick={props.handleClose} variant='outlined' color='secondary' style={{margin:'0.5em',bottom: '5px' ,right:"5px",position:'absolute' } }>Close</Button>
