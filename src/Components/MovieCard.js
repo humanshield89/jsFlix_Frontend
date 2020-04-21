@@ -14,8 +14,10 @@ class MovieCard extends React.Component {
         this.handleMouseIn = this.handleMouseIn.bind(this);
         this.handleMouseOut = this.handleMouseOut.bind(this);
         this.getQualityChips = this.getQualityChips.bind(this);
+        this.showImage = this.showImage.bind(this);
         this.state = {
-            isHovered: false
+            isHovered: false,
+            loaded: false
         }
     }
 
@@ -53,7 +55,11 @@ class MovieCard extends React.Component {
             <Chip size="small" label={text} key={text} className="qualityChips"/>
         )
     }
-
+    showImage(){
+        this.setState({
+            loaded: true
+        })
+    }
     render() {
         return (
             <Zoom direction="up" in={true} mountOnEnter unmountOnExit
@@ -63,7 +69,9 @@ class MovieCard extends React.Component {
                     <CardActionArea>
 
                         <img src={this.props.movie.medium_cover_image} alt="cover_photo_here"
-                             className="movieCardCoverPicture"/>
+                             className="movieCardCoverPicture"  onLoad={this.showImage} style={ this.state.loaded ? {} : {display: "none"}}  />
+                        <img src={'default_cover.jpg'} alt="cover_photo_here"
+                             className="movieCardCoverPicture" style={ this.state.loaded ? {display: "none"} : {}}/>
                         <div className='cardMovieTitle'>
                             <h3>
                                 {this.props.movie.title}
