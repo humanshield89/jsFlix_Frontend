@@ -17,11 +17,13 @@ class App extends React.Component {
             pendingTasks: [],
             onPlayerPage: false,
             moviePlaying: null,
+            showSearchForm: false,
             movieSourceUrl: null
         };
         this.addPendingTask = this.addPendingTask.bind(this);
         this.removePendingTask = this.removePendingTask.bind(this);
         this.handleGoToPlayer = this.handleGoToPlayer.bind(this);
+        this.handleSearchClick = this.handleSearchClick.bind(this);
     }
 
     handleGoToPlayer (movie , sourceLink){
@@ -57,12 +59,18 @@ class App extends React.Component {
         );
     }
 
+    handleSearchClick(event){
+        this.setState({
+            showSearchForm : !this.state.showSearchForm
+        })
+    }
+
     render() {
         return (
             <div className="App">
                 {!this.state.onPlayerPage ? <div style={{backgroundColor:'transparent'}}>
-                    <MyAppBar pendingTasks={this.state.pendingTasks.length > 0}/>
-                    <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask} goToplayer={this.handleGoToPlayer}/>
+                    <MyAppBar pendingTasks={this.state.pendingTasks.length > 0} handleSeachClick={this.handleSearchClick} searchFormVisible={this.state.showSearchForm}/>
+                    <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask} goToplayer={this.handleGoToPlayer} handleSearchClick={this.handleSearchClick} showSearchForm={this.state.showSearchForm} />
                 </div> : <PagePlayer movie={this.state.moviePlaying} sourceUrl={this.state.movieSourceUrl}/>}
             </div>
         );

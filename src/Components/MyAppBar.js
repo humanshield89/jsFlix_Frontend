@@ -7,6 +7,7 @@ import {fade, makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import LinearProgress from "@material-ui/core/LinearProgress";
+import {Search} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,9 +61,9 @@ export default function MyAppBar(props) {
                         edge="end"
                         className={classes.menuButton}
                         color="inherit"
-                        aria-label="profile">
+                        aria-label="search">
 
-                        <AccountCircleIcon/>
+                        <Search onClick={props.handleSeachClick}/>
                     </IconButton>
                 </Toolbar>
                 <LinearProgress hidden={!props.pendingTasks}/>
