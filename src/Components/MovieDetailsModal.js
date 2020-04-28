@@ -76,11 +76,10 @@ function a11yPropsTop(index) {
 }
 
 
-const webSocket = new WebSocketManager(window, (msg) => {
-    //setPrepareProgress(msg.value);
-});
-
 export default function MovieDetailsModal(props) {
+    const webSocket = new WebSocketManager(window, (msg) => {
+        //setPrepareProgress(msg.value);
+    });
     const classes = useStyles();
     const youtubeEmbed = require('youtube-embed');
 

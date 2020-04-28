@@ -39,6 +39,7 @@ class YifyContainer extends React.Component {
         this.handleMinimumRatingChange = this.handleMinimumRatingChange.bind(this);
         this.handleOrderValueChange = this.handleOrderValueChange.bind(this);
         this.handleSearchBtnClick = this.handleSearchBtnClick.bind(this);
+        this.handleGoToPlayer = this.handleGoToPlayer.bind(this);
         this.movieGenre = ['all', 'Action', 'Thriller', 'Crime', 'Adventure', 'Family', 'Animation', 'Drama', 'Romance', 'Comedy', 'Biography', 'History', 'Horror', 'War', 'Mystery', 'Musical', 'Fantasy', 'Music', 'Sport', 'Documentary', 'Sci-Fi', 'Western', 'News'];
 
         this.sortByQueryValues = ['title', 'year', 'rating', 'download_count', 'like_count', 'date_added'];
@@ -60,19 +61,23 @@ class YifyContainer extends React.Component {
             sort_by: 'year', // String (title, year, rating, peers, seeds, download_count, like_count, date_added, featured)
             order_by: 'desc',//String (desc, asc)
         };
-        this.state = {
-            totalMovieCount: 0,
-            moviesList: [],
-            showModal: false,
-            currentMovieModal: null,
-            videoPlaying: false,
-            videoSource: null,
-            genreTabValue: 0,
-            sortByValue: 1,
-            minimumRatingValue: 0,
-            orderValue: 1,
-        };
-        this.getMovieList();
+        if(this.props.previousState){
+            this.state = this.props.previousState
+        } else {
+            this.state = {
+                totalMovieCount: 0,
+                moviesList: [],
+                showModal: false,
+                currentMovieModal: null,
+                videoPlaying: false,
+                videoSource: null,
+                genreTabValue: 0,
+                sortByValue: 1,
+                minimumRatingValue: 0,
+                orderValue: 1,
+            };
+            this.getMovieList();
+        }
     }
 
     handleOnMovieCardClick(index) {
@@ -203,6 +208,10 @@ class YifyContainer extends React.Component {
         this.getMovieList();
     }
 
+    handleGoToPlayer(movie , sourceLink){
+        this.props.goToplayer(movie,sourceLink,this.state);
+    }
+
     render() {
 
         return (
@@ -284,7 +293,7 @@ class YifyContainer extends React.Component {
                                 />
                     {this.state.showModal &&
                     <MovieDetailsModal movie={this.state.currentMovieModal} showModal={this.state.showModal}
-                                       handleClose={this.handleCloseModal} handleGoToPlayer={this.props.goToplayer}/>}
+                                       handleClose={this.handleCloseModal} handleGoToPlayer={this.handleGoToPlayer}/>}
                     {this.state.totalMovieCount !== 0 && <Grid container justify="center" style={{padding: '0.5em'}}>
                         <Pagination count={Math.round(this.state.totalMovieCount / this.filters.limit)}
                                     page={this.filters.page} onChange={this.handlePageChange} color="primary"

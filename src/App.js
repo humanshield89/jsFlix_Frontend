@@ -20,20 +20,31 @@ class App extends React.Component {
             showSearchForm: false,
             movieSourceUrl: null
         };
+
         this.addPendingTask = this.addPendingTask.bind(this);
         this.removePendingTask = this.removePendingTask.bind(this);
         this.handleGoToPlayer = this.handleGoToPlayer.bind(this);
         this.handleSearchClick = this.handleSearchClick.bind(this);
+        this.closePlayerPage = this.closePlayerPage.bind(this);
     }
 
-    handleGoToPlayer (movie , sourceLink){
+    handleGoToPlayer (movie , sourceLink,previousState){
         this.setState(
             {
                 onPlayerPage: true,
                 moviePlaying : movie,
-                movieSourceUrl: sourceLink
+                movieSourceUrl: sourceLink,
+                previousYifyContainerState: previousState
             }
         )
+    }
+
+    closePlayerPage(){
+        this.setState({
+            onPlayerPage: false,
+            moviePlaying : '',
+            movieSourceUrl: ""
+        })
     }
 
     addPendingTask(task) {
@@ -70,8 +81,8 @@ class App extends React.Component {
             <div className="App">
                 {!this.state.onPlayerPage ? <div style={{backgroundColor:'transparent'}}>
                     <MyAppBar pendingTasks={this.state.pendingTasks.length > 0} handleSeachClick={this.handleSearchClick} searchFormVisible={this.state.showSearchForm}/>
-                    <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask} goToplayer={this.handleGoToPlayer} handleSearchClick={this.handleSearchClick} showSearchForm={this.state.showSearchForm} />
-                </div> : <PagePlayer movie={this.state.moviePlaying} sourceUrl={this.state.movieSourceUrl}/>}
+                    <YifyContainer removePendingTask={this.removePendingTask} addPendingTask={this.addPendingTask} goToplayer={this.handleGoToPlayer} handleSearchClick={this.handleSearchClick} showSearchForm={this.state.showSearchForm} previousState={this.state.previousYifyContainerState}/>
+                </div> : <PagePlayer movie={this.state.moviePlaying} sourceUrl={this.state.movieSourceUrl} closePlayerCallback={this.closePlayerPage}/>}
             </div>
         );
     }
