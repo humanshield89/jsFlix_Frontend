@@ -1,6 +1,6 @@
 {
-  "name": "react-app",
-  "version": "0.1.0",
+  "name": "jsflix",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.10",
@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "cors": "^2.8.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
@@ -39,5 +40,23 @@
   },
   "devDependencies": {
     "video.js": "^7.7.5"
-  }
+  },
+  "description": "Watch movies online for free (only watch movies that you have legit digital copies of) ",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/humanshield89/jsFlix_Frontend.git"
+  },
+  "keywords": [
+    "jsflix",
+    "movies",
+    "torrent",
+    "yify"
+  ],
+  "author": "humanshield85",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/humanshield89/jsFlix_Frontend/issues"
+  },
+  "homepage": "https://github.com/humanshield89/jsFlix_Frontend#readme"
 }
